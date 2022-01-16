@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dom Parser</title>
+    <style>
+        h1 {
+            align-items: center;
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+         }
+
+        button {
+            width: 80px;
+            height: 30px;
+            margin-left: 700px;
+            background-color: #1B98F5;
+            border-radius: 15px;
+        }
+
+        button:hover {
+            background-color: #12B0E8;
+            color: white;
+            cursor: pointer;
+        }
+       
+    </style>
+    <script>
+        var xmlDoc;
+        function loadxmldoc() {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    xmlDoc = this.responseXML;
+                    myFunction();
+                }
+            };
+            xmlhttp.open("GET", "flight.xml", true);
+            xmlhttp.send();
+        }
+        function myFunction(xml, action) {
+
+            var x, i, table;
+
+            if (action == "delete") {
+                y = xmlDoc.getElementsByTagName('Flight')[0];
+                xmlDoc.documentElement.removeChild(y);
+                alert('The Element has been removed!');
+            }
+            if (action == "create") {
+                a = prompt("Enter Flight No");
+                b = prompt("Enter Airline No");
+                c = prompt("Enter Source");
+                d = prompt("Enter Destination");
+                e = prompt("Enter Fare");
+                f = prompt("Enter No of Seats");
+
+
+                var i
+                var details = []
+                Flight = xmlDoc.createElement("Flight")
+                details[0] = xmlDoc.createElement("flightNo");
+                details[0].appendChild(xmlDoc.createTextNode(a))
+                Flight.appendChild(details[0])
+                details[1] = xmlDoc.createElement("airlineName")
+                details[1].appendChild(xmlDoc.createTextNode(b))
+                Flight.appendChild(details[1])
+                details[2] = xmlDoc.createElement("source")
+                details[2].appendChild(xmlDoc.createTextNode(c))
+                Flight.appendChild(details[2])
+                details[3] = xmlDoc.createElement("destination")
+                details[3].appendChild(xmlDoc.createTextNode(d))
+                Flight.appendChild(details[3])
+                details[4] = xmlDoc.createElement("fare")
+                details[4].appendChild(xmlDoc.createTextNode(e))
+                Flight.appendChild(details[4])
+                details[5] = xmlDoc.createElement("noofseats")
+                details[5].appendChild(xmlDoc.createTextNode(f))
+                Flight.appendChild(details[5])
+
+
+                xmlDoc.documentElement.appendChild(Flight);
+            }
+            if (action == "edit") {
+
+                i = parseInt(prompt("Enter index to change")) - 1;
+                a = prompt("Enter Flight No");
+                b = prompt("Enter Airline No");
+                c = prompt("Enter Source");
+                d = prompt("Enter Destination");
+                e = prompt("Enter Fare");
+                f = prompt("Enter No of seats");
+                xmlDoc.getElementsByTagName("Flight")
+                [i].getElementsByTagName("flightNo")[0].firstChild.nodeValue = a
+
+                xmlDoc.getElementsByTagName("Flight")
+                [i].getElementsByTagName("airlineName")[0].firstChild.nodeValue = b
+
+                xmlDoc.getElementsByTagName("Flight")
+                [i].getElementsByTagName("source")[0].firstChild.nodeValue = c
+
+                xmlDoc.getElementsByTagName("Flight")
+                [i].getElementsByTagName("destination")[0].firstChild.nodeValue = d
+
+                xmlDoc.getElementsByTagName("Flight")
+                [i].getElementsByTagName("fare")[0].firstChild.nodeValue = e
+
+                xmlDoc.getElementsByTagName("Flight")
+                [i].getElementsByTagName("noofseats")[0].firstChild.nodeValue = f
+            }
+
+            table = "<tr><th>Flight No</th><th>Airline No</th><th>Source</th><th>Destination</th><th>Fare</th><th>No of Seats</th></tr>";
+            x = xmlDoc.getElementsByTagName("Flight")
+            for (i = 0; i < x.length; i++) {
+                table += "<tr><td>" +
+                    x[i].getElementsByTagName("flightNo")[0].childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("airlineName")[0].childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("source")[0].childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("destination")[0].childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("fare")[0].childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("noofseats")[0].childNodes[0].nodeValue + "</td></tr>";
+
+
+            }
+            document.getElementById("demo").innerHTML = table;
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1><u>FLIGHTS</u></h1>
+    <p><button onclick="loadxmldoc()">Refresh</button></p>
+  
+    <table align="center" id="demo" border="2">
+        <tr>
+            <th>Flight No</th>
+            <th>Airline No</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Fare</th>
+            <th>No of Seats</th>
+        </tr>
+    </table>
+    <br>
+
+    <center><input type="button"class ="btn" value="Remove" onclick="myFunction(xmlDoc,'delete')" />
+    <input type="button" value="Add" onclick="myFunction(xmlDoc,'create')" name="add" />
+    <input type="button" value="Edit" onclick="myFunction(xmlDoc,'edit')" name="edit" /></center>
+
+</body>
+
+</html>
